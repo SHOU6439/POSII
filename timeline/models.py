@@ -1,7 +1,7 @@
 from enum import unique
 from django.db import models
 from imagekit.models import ImageSpecField, ProcessedImageField
-from imagekit.processors import ResizeToFill, ResizeTofit
+from imagekit.processors import ResizeToFill
 # Create your models here.
 class Like(models.Model):
     user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE)
@@ -15,7 +15,7 @@ class Post(models.Model):
     author = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE)
     text = models.TextField(verbose_name='本文')
     photo = models.ImageField(verbose_name='写真', blank=True, null=True, upload_to='images/')
-    post_photo = ImageSpecField(source='photo',processors=[ResizeTofit(1080,1080)],format='JPEG',options={'quality':60})
+    post_photo = ImageSpecField(source='photo',processors=[ResizeToFill(1080,1080)],format='JPEG',options={'quality':60})
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
 

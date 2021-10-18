@@ -26,7 +26,7 @@ SECRET_KEY = 'oge_9(u_p059bx!4crgm2ea2ce05b7t&19art@yy=ms3i&#dsl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
