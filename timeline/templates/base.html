@@ -9,21 +9,30 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-info fixed-top">
-        <a href="#" class="navbar-brand">POSII</a>
+        <a href="{% url 'timeline:index' %}" class="navbar-brand">POSII</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampledefault">
             <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a href="#" class="nav-link">タイムライン</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">プロフィール</a>
+                    <a href="{% url 'accounts:edit' %}" class="nav-link">プロフィール</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">ログアウト</a>
+                    <a href="{% url 'account_logout' %}" class="nav-link">ログアウト</a>
                 </li>
+                {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'account_login' %}" class="nav-link">ログイン</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'account_signup' %}" class="nav-link">ユーザー登録</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
