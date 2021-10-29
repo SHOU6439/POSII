@@ -1,5 +1,7 @@
+from django.contrib.messages.api import success
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
-from .models import Post
+from .models import Like, Post
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PostForm
@@ -16,7 +18,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         posts = Post.objects.order_by('-created_at')
         return posts
 
-index = IndexView.as_view()
+
 
 class CreateView(LoginRequiredMixin, generic.CreateView):
     form_class = PostForm
@@ -31,4 +33,38 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
 
 
 
+
+
+
+
+class DeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Post
+    success_url = reverse_lazy('timeline:index')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.author == request.user:
+            messages.success(self.request, '削除しました。')
+            return super().delete(request, *args, **kwargs)
+
+
+
+class LikeView(LoginRequiredMixin, generic.View):
+    model = Like
+
+    def post(self, request):
+        post_id = request.POST.get('id')
+        post = Post.objects.get(id=post_id)
+        like = Like(user=self.request.user,post=post)
+        like.save()
+        like_count = Like.objects.filter(post=post).count()
+        data = {'message': '褒めました','like_count': like_count}
+        return JsonResponse(data)
+
+
+
+
+index = IndexView.as_view()
 create = CreateView.as_view()
+delete = DeleteView.as_view()
+like = LikeView.as_view()
